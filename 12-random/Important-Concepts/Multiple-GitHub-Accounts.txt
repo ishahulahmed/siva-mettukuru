@@ -1,0 +1,66 @@
+To ensure that your commits go to the correct GitHub account, you can configure Git to use different user details based on the repository. This way, when you're working with multiple GitHub accounts, you can ensure that commits are attributed to the correct one.
+
+Here's how you can set it up:
+
+ 1. Set Global Git Config (Default Account):
+    If you have a default account that you want to use for most repositories, set your global Git user name and email:
+
+    git config --global user.name "Your Default Name"
+    git config --global user.email "your-default-email@example.com"
+
+    This will set the user name and email for all repositories unless overridden.
+
+ 2. Set Repository-Specific Config (For Each Repo):
+    For each repository where you want to use a different account, navigate to that repository’s folder and run:
+
+    git config user.name "Your Other Name"
+    git config user.email "your-other-email@example.com"
+
+    This will override the global settings only for that repository.
+
+ 3. SSH Keys for Multiple Accounts:
+    If you're using SSH to authenticate, you need to configure different SSH keys for each account. Here’s how to do that:
+
+    a. Generate a new SSH key for each account
+       Run this command to generate a new SSH key pair for each account:
+
+       ssh-keygen -t rsa -b 4096 -f <your-file-name>
+
+       You can specify different file names for each key, for example:
+       ~/.ssh/id_rsa_account1
+       ~/.ssh/id_rsa_account2
+
+   b. Add SSH keys to GitHub
+      Add each SSH key to the corresponding GitHub account under the SSH and GPG keys section of your GitHub account settings.
+
+   c. Configure SSH to use different keys
+      Edit your ~/.ssh/config file to specify which key to use for each GitHub account:
+
+      # GitHub Account 1 
+      Host thomas
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_account1
+
+      # GitHub Account 2 
+      Host ravi
+        HostName github.com
+        User git
+        IdentityFile ~/.ssh/id_rsa_account2
+
+     Then, when cloning repositories or setting remotes, use the alias specified in the SSH config file: 
+     git clone git@thomas:user/repo.git
+
+     This ensures that the correct SSH key is used for each GitHub account.
+
+ 4. Use git remote to Verify/Change Remote URLs:
+    Sometimes, you'll need to ensure that the correct remote URL is set. You can check or change it with:
+
+    git remote -v
+
+    If needed, update the remote URL:
+    git remote set-url origin git@thomas:user/repo.git
+
+    This ensures that the correct GitHub account is used for pushing and pulling.
+
+By using repository-specific configurations and setting up SSH keys for each account, you can seamlessly work with multiple GitHub accounts without mixing up commits. Let me know if you need further help with any of the steps!
